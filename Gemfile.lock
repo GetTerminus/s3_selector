@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    s3_selector (0.1.0)
+    s3_selector (0.1.1)
       aws-sdk-athena
       aws-sdk-s3
       concurrent_executor
