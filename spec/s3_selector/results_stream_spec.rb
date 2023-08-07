@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 's3_selector/results_stream'
 
-RSpec.describe ResultsStream do
+RSpec.describe S3Selector::ResultsStream do
   before :all do
     @random_seed = ENV.fetch('S3_SELECT_RANDOM_SEED', (100 * rand).to_i)
     puts "Running S3 Select with seed: #{@random_seed}"
@@ -26,14 +26,14 @@ RSpec.describe ResultsStream do
   describe 's3_select_request_body' do
     describe 'the default behavior' do
       it 'streams in parquet' do
-        instance = ResultsStream.new(s3_client: client, s3_files: [])
+        instance = described_class.new(s3_client: client, s3_files: [])
         expect(instance.send(:s3_select_request_body)).to include '<Parquet />'
       end
     end
 
     describe 'streaming in json' do
       it 'streams in json' do
-        instance = ResultsStream.new(
+        instance = described_class.new(
           s3_client: client,
           s3_files: [],
           input_format: :json,
@@ -45,7 +45,7 @@ RSpec.describe ResultsStream do
       end
 
       it 'streams in gziped json' do
-        instance = ResultsStream.new(
+        instance = described_class.new(
           s3_client: client,
           s3_files: [],
           input_format: :json,
@@ -57,7 +57,7 @@ RSpec.describe ResultsStream do
       end
 
       it 'throws an error if you do not specify type' do
-        instance = ResultsStream.new(
+        instance = described_class.new(
           s3_client: client,
           s3_files: [],
           input_format: :json,
@@ -67,7 +67,7 @@ RSpec.describe ResultsStream do
       end
 
       it 'throws an error if you specify an unknown type' do
-        instance = ResultsStream.new(
+        instance = described_class.new(
           s3_client: client,
           s3_files: [],
           input_format: :json,
@@ -130,7 +130,7 @@ RSpec.describe ResultsStream do
       end
 
       let(:instance) do
-        ResultsStream.new(
+        described_class.new(
           s3_client: client,
           s3_files: [
             double(bucket: double(name: file1_bucket), key: file1_key, public_url: file1_url),
@@ -181,7 +181,7 @@ RSpec.describe ResultsStream do
 
     context 'when streaming multiple files' do
       let(:instance) do
-        ResultsStream.new(
+        described_class.new(
           s3_client: client,
           s3_files: [
             double(bucket: double(name: file1_bucket), key: file1_key, public_url: file1_url),
