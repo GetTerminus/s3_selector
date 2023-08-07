@@ -21,3 +21,11 @@ Or install it yourself as:
 ## Usage
 
 ### With S3 Files
+
+```ruby
+bucket = Aws::S3::Bucket.new("my-bucket")
+s3_files = bucket.objects(prefix: "folder-with-files")
+
+results = S3Selector::ResultsStream.new(s3_files: []).records
+results.each {|r| puts r}
+```
